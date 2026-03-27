@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ct-forest: #01472e;
+  --ct-sage: #ccd5ae;
+  --ct-olive: #e9edc9;
+  --ct-cream: #fefae0;
+  --ct-moss: #a3b18a;
+  --ct-muted: #5f6f52;
+  --ct-curve: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(204, 213, 174, 0.38), transparent 26%),
+      radial-gradient(circle at bottom right, rgba(163, 177, 138, 0.16), transparent 22%),
+      #f6f5ef;
+    color: var(--ct-forest);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  ::selection {
+    background: rgba(1, 71, 46, 0.18);
+    color: var(--ct-forest);
+  }
+}
+
+@layer components {
+  .ct-shell {
+    @apply relative overflow-hidden;
+  }
+
+  .ct-card {
+    @apply bg-white/80 border border-ct-border shadow-card transition-all duration-300;
+    border-radius: 2rem;
+    backdrop-filter: blur(16px);
+  }
+
+  .ct-card-hover {
+    @apply ct-card hover:-translate-y-1 hover:shadow-glow-cyan cursor-pointer;
+  }
+
+  .ct-stat-card {
+    @apply ct-card p-6 relative overflow-hidden;
+  }
+
+  .ct-stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(1, 71, 46, 0.08), transparent 45%);
+    pointer-events: none;
+  }
+
+  .ct-stat-card.cyan::after,
+  .ct-stat-card.emerald::after,
+  .ct-stat-card.amber::after,
+  .ct-stat-card.saffron::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 3px;
+    border-radius: 999px;
+  }
+
+  .ct-stat-card.cyan::after { background: var(--ct-forest); }
+  .ct-stat-card.emerald::after { background: #5f6f52; }
+  .ct-stat-card.amber::after { background: #8fa36d; }
+  .ct-stat-card.saffron::after { background: #a3b18a; }
+
+  .ct-glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(1, 71, 46, 0.08);
+    border-radius: 999px;
+    box-shadow: 0 16px 40px rgba(1, 71, 46, 0.08);
+  }
+
+  .ct-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-semibold uppercase tracking-[0.28em] transition-all duration-300;
+    color: var(--ct-cream);
+    background: var(--ct-forest);
+    border-radius: 999px;
+    box-shadow: 0 14px 30px rgba(1, 71, 46, 0.16);
+  }
+
+  .ct-btn-primary:hover {
+    transform: translateY(-2px);
+  }
+
+  .ct-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-semibold uppercase tracking-[0.24em] transition-all duration-300;
+    color: var(--ct-forest);
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(1, 71, 46, 0.12);
+    border-radius: 999px;
+    backdrop-filter: blur(14px);
+  }
+
+  .ct-btn-success {
+    @apply ct-btn-primary;
+    background: #5f6f52;
+  }
+
+  .ct-btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 font-semibold uppercase tracking-[0.22em] transition-all duration-300;
+    color: #9c4f3d;
+    background: rgba(156, 79, 61, 0.08);
+    border: 1px solid rgba(156, 79, 61, 0.16);
+    border-radius: 999px;
+  }
+
+  .ct-btn-ghost {
+    @apply px-3 py-1.5 text-xs uppercase tracking-[0.24em] transition-all duration-300;
+    color: var(--ct-muted);
+    border-radius: 999px;
+  }
+
+  .ct-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase;
+    letter-spacing: 0.24em;
+    border-radius: 999px;
+  }
+
+  .ct-badge-pending {
+    @apply ct-badge;
+    color: #6e7f55;
+    background: rgba(163, 177, 138, 0.18);
+    border: 1px solid rgba(163, 177, 138, 0.28);
+  }
+
+  .ct-badge-approved {
+    @apply ct-badge;
+    color: var(--ct-forest);
+    background: rgba(1, 71, 46, 0.08);
+    border: 1px solid rgba(1, 71, 46, 0.12);
+  }
+
+  .ct-badge-rejected {
+    @apply ct-badge;
+    color: #9c4f3d;
+    background: rgba(156, 79, 61, 0.08);
+    border: 1px solid rgba(156, 79, 61, 0.16);
+  }
+
+  .ct-badge-verified {
+    @apply ct-badge;
+    color: var(--ct-forest);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(1, 71, 46, 0.1);
+  }
+
+  .ct-badge-chain {
+    @apply ct-badge;
+    color: #5f6f52;
+    background: rgba(95, 111, 82, 0.1);
+    border: 1px solid rgba(95, 111, 82, 0.16);
+  }
+
+  .ct-table {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .ct-table thead tr {
+    border-bottom: 1px solid rgba(1, 71, 46, 0.1);
+  }
+
+  .ct-table thead th {
+    @apply px-4 py-4 text-left text-[10px] font-bold uppercase text-ct-muted;
+    letter-spacing: 0.26em;
+  }
+
+  .ct-table tbody tr {
+    border-bottom: 1px solid rgba(1, 71, 46, 0.08);
+    transition: background-color 0.3s var(--ct-curve);
+  }
+
+  .ct-table tbody tr:hover {
+    background: rgba(204, 213, 174, 0.18);
+  }
+
+  .ct-table tbody td {
+    @apply px-4 py-4 text-ct-text;
+  }
+
+  .ct-input {
+    @apply w-full bg-transparent px-0 py-3 text-sm text-ct-text placeholder-ct-muted focus:outline-none;
+    border: 0;
+    border-bottom: 1px solid rgba(1, 71, 46, 0.16);
+    border-radius: 0;
+  }
+
+  .ct-section-title {
+    @apply text-[10px] font-bold uppercase text-ct-muted mb-3;
+    letter-spacing: 0.34em;
+  }
+
+  .ct-live-dot {
+    @apply w-2.5 h-2.5 rounded-full;
+    background: var(--ct-forest);
+    box-shadow: 0 0 0 8px rgba(1, 71, 46, 0.08);
+  }
+
+  .ct-divider {
+    border-top: 1px solid rgba(1, 71, 46, 0.08);
+  }
+
+  .ct-hash {
+    @apply font-mono text-xs px-2.5 py-1;
+    color: var(--ct-forest);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(1, 71, 46, 0.08);
+    border-radius: 999px;
+  }
+
+  .ct-rounded-section {
+    border-top-left-radius: 2.5rem;
+    border-top-right-radius: 2.5rem;
+  }
+
+  .ct-editorial-title {
+    font-family: 'Anton', sans-serif;
+    line-height: 0.78;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  .ct-reveal {
+    opacity: 0;
+    transform: translateY(100px);
+    transition:
+      opacity 1.2s var(--ct-curve),
+      transform 1.2s var(--ct-curve);
+  }
+
+  .ct-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ct-float {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .ct-quick-add {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1.5rem;
+    border-radius: 2.5rem;
+    background: rgba(1, 71, 46, 0.3);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.8s var(--ct-curve);
+  }
+
+  .ct-quick-add > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 12rem;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    background: white;
+    color: var(--ct-forest);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    transform: translateY(32px);
+    transition: transform 0.8s var(--ct-curve);
+  }
+
+  .group:hover .ct-quick-add {
+    opacity: 1;
+  }
+
+  .group:hover .ct-quick-add > span {
+    transform: translateY(0);
+  }
+
+  .font-heading { font-family: 'Anton', sans-serif; }
+  .bg-gov-surface { @apply bg-ct-surface; }
+  .bg-gov-slate { @apply bg-ct-hover; }
+  .text-text-primary { @apply text-ct-text; }
+  .text-text-secondary { @apply text-ct-subtle; }
+  .text-text-muted { @apply text-ct-muted; }
+  .gov-card { @apply ct-card p-4; }
+  .gov-card-header { @apply bg-ct-surface px-4 py-3 text-ct-text text-sm font-semibold flex items-center justify-between border-b border-ct-border; }
+  .gov-table { @apply ct-table; }
+  .gov-badge { @apply ct-badge; }
+  .gov-input { @apply ct-input; }
+  .gov-stat-label { @apply text-[10px] font-bold uppercase tracking-[0.24em] text-ct-muted; }
+  .gov-stat-value { @apply text-3xl font-bold leading-none text-ct-text; }
+  .btn-gov { @apply ct-btn-primary text-xs py-2.5; }
+  .btn-gov-outline { @apply ct-btn-secondary text-xs py-2.5; }
+  .btn-gov-danger { @apply ct-btn-danger text-xs py-2.5; }
+  .badge-approved { @apply ct-badge-approved; }
+  .badge-pending { @apply ct-badge-pending; }
+  .badge-rejected { @apply ct-badge-rejected; }
+  .badge-verified { @apply ct-badge-verified; }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}

@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # ─── PostgreSQL Database ─────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: carbontrace-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: carbontrace
+      POSTGRES_PASSWORD: carbontrace_dev
+      POSTGRES_DB: carbontrace_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U carbontrace -d carbontrace_db']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── Backend API Server ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carbontrace-api
+    restart: unless-stopped
+    ports:
+      - '5001:5001'
+    environment:
+      NODE_ENV: development
+      PORT: 5001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: carbontrace
+      DB_PASSWORD: carbontrace_dev
+      DB_NAME: carbontrace_db
+      JWT_SECRET: dev-jwt-secret-do-not-use-in-prod
+      JWT_REFRESH_SECRET: dev-jwt-refresh-secret-do-not-use-in-prod
+      JWT_EXPIRY: 8h
+      JWT_REFRESH_EXPIRY: 7d
+      FRONTEND_A_URL: http://localhost:3000
+      FRONTEND_B_URL: http://localhost:3001
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+      - ./contracts:/contracts
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ─── Website A — Government Portal ──────────────────────────────────────────
+  frontend-a:
+    build:
+      context: ./website-a
+      dockerfile: Dockerfile
+      target: dev
+    container_name: carbontrace-gov
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      VITE_API_URL: http://localhost:5001
+    volumes:
+      - ./website-a:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+    driver: local

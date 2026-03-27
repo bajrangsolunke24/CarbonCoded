@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read and write to the 'lands' collection
+    // Ensure the document's userId matches the authenticated user's ID
+    match /lands/{landId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // Allow NGOs to read and write to the 'coastalLands' collection
+    // Ensure the document's ngoId matches the authenticated user's ID
+    match /coastalLands/{landId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.ngoId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.ngoId == request.auth.uid;
+    }
+
+    // Default deny for other collections (safety first)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

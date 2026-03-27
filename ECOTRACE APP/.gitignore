@@ -1,0 +1,35 @@
+# IDE files
+*.iml
+.idea/
+.vscode/
+
+# Gradle
+.gradle/
+build/
+
+# Local config
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Native build
+.externalNativeBuild
+.cxx
+
+# Captures
+captures/
+
+# Environment / secrets
+.env
+*.keystore
+*.jks
+google-services.json
+
+# Build outputs
+*.apk
+*.aab

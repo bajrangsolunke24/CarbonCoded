@@ -1,0 +1,22 @@
+# Environment files (VERY IMPORTANT)
+.env
+.env.local
+.env.*
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+
+# Build folders
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python (if used)
+__pycache__/
+*.pyc
